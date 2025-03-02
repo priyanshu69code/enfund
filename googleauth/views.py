@@ -33,6 +33,8 @@ def google_login(request):
     """
     Step 1: Redirect user to Google's OAuth login page.
     """
+    print(settings.SOCIAL_AUTH_GOOGLE_OAUTH2_KEY)
+    print(settings.SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET)
     params = {
         "client_id": settings.SOCIAL_AUTH_GOOGLE_OAUTH2_KEY,
         "response_type": "code",
