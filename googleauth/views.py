@@ -10,7 +10,7 @@ from .models import GoogleDriveToken
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.conf import settings
 
-REDIRECT_URI = "http://127.0.0.1:8000/auth/social/google/login/callback/"
+REDIRECT_URI = "https://enfund-3bc4b732ed3d.herokuapp.com/auth/social/google/login/callback/"
 GOOGLE_AUTH_URL = "https://accounts.google.com/o/oauth2/auth"
 GOOGLE_TOKEN_URL = "https://oauth2.googleapis.com/token"
 GOOGLE_USER_INFO_URL = "https://www.googleapis.com/oauth2/v3/userinfo"
