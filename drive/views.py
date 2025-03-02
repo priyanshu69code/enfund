@@ -7,6 +7,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from googleauth.models import GoogleDriveToken
+from django.utils.timezone import now, timedelta
+import requests
 
 # Define media upload and download directories
 UPLOAD_DIR = os.path.join(settings.MEDIA_ROOT, "uploads")
@@ -16,14 +18,32 @@ DOWNLOAD_DIR = os.path.join(settings.MEDIA_ROOT, "downloads")
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 os.makedirs(DOWNLOAD_DIR, exist_ok=True)
 
+from google.oauth2.credentials import Credentials
+
 def get_drive_service(user):
     """Get Google Drive API service for the authenticated user."""
     token = GoogleDriveToken.objects.filter(user=user).first()
     if not token:
         return None
 
-    credentials = Credentials(token=token.access_token)
+    credentials = Credentials(
+        token=token.access_token,
+        refresh_token=token.refresh_token,
+        token_uri="https://oauth2.googleapis.com/token",
+        client_id=settings.SOCIAL_AUTH_GOOGLE_OAUTH2_KEY,
+        client_secret=settings.SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET,
+    )
+
+    # Refresh the token if it's expired
+    if credentials.expired and credentials.refresh_token:
+        credentials.refresh(requests.Request())
+        # Update the database with the new access token
+        token.access_token = credentials.token
+        token.expires_in = now() + timedelta(seconds=3600)  # Assuming 1 hour expiry
+        token.save()
+
     return build('drive', 'v3', credentials=credentials)
+
 
 class GoogleDriveUploadView(APIView):
     """Uploads a file to the user's Google Drive"""

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Page</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1 class="mt-5">Welcome to the Chat Application</h1>
+
+        <div class="mt-4">
+            <p><strong>Instructions:</strong></p>
+            <ul>
+                <li>Click the button below to log in using Google authentication and get your auth token.</li>
+            </ul>
+            <a href="{% url 'googleauth:google_login' %}" class="btn btn-primary">Login with Google</a>
+        </div>
+
+        <div class="mt-4">
+            <p><strong>Chat Instructions:</strong></p>
+            <ul>
+                <li>Click the button below to open Chat Group 1.</li>
+                <li>You need to open the chat in two or more different tabs for real-time interaction.</li>
+                <li>When you join the chat, give yourself a username.</li>
+                <li>Start texting with each other in real time!</li>
+            </ul>
+            <a href="{% url 'dchat:chat_room' 'group_1' %}" class="btn btn-success">Open Chat Group 1</a>
+        </div>
+    </div>
+</body>
+</html>
