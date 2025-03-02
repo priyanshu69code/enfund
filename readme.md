@@ -1,176 +1,98 @@
-# Google Drive API Endpoints Documentation
+# Real-Time Chat Application
 
-This document provides details on the available API endpoints for integrating Google Drive with your Django application. The APIs allow users to upload files to Google Drive, list their Google Drive files, and download files from Google Drive.
+![Project Banner](#)
 
-## Base URL
+## Overview
+We are looking for a talented Backend Developer to join our dynamic team. As part of the application process, candidates will be required to complete a small assignment that involves integrating several technologies using Django as the backend framework. This assignment will help us assess your skills and fit for our team.
 
-```
-https://enfund-3bc4b732ed3d.herokuapp.com/google-drive/
-```
+## Assignment Overview
+The assignment involves creating a comprehensive template for integrating the following technologies:
+- **Google OAuth 2.0 API** for user authentication.
+- **Google Picker API** for file uploads and reading data in JSON format.
+- **A WebSocket** for real-time communication between users.
 
-Replace `enfund-3bc4b732ed3d.herokuapp.com` with your actual server URL if needed.
+## Detailed Requirements
+### 1. Google Authentication Flow
+- Create an endpoint that initiates the **Google Auth** flow.
+- Implement a **callback URL** where Google sends the authentication data.
+- Return the authentication data received from Google.
 
-## Authentication
+### 2. Google Drive Integration
+- Develop an endpoint that allows users to connect their **Google Drive**.
+- Implement functionality for users to **upload files** to their Google Drive.
+- Provide an option to **fetch and download files** locally from Google Drive.
 
-All endpoints require authentication. Users must be authenticated via the Google OAuth system and have their Google Drive linked.
+### 3. WebSocket for User Chat
+- Implement a **WebSocket** that enables real-time chat between two pre-configured users.
+- Ensure that messages are **sent and received in real-time**.
 
----
-
-## 1. Upload File to Google Drive
-
-**Endpoint:**
-
-```
-POST /google-drive/upload/
-```
-
-**Description:**
-Uploads a file to the authenticated user's Google Drive.
-
-**Headers:**
-
-```json
-{
-  "Authorization": "Bearer <your_access_token>",
-  "Content-Type": "multipart/form-data"
-}
-```
-
-**Body (Multipart Form Data):**
-
-| Key  | Type  | Description          |
-|------|-------|----------------------|
-| file | File  | The file to upload   |
-
-**Response (Success - 200 OK):**
+## Home Page Instructions
+![Chat Interface](Screenshots/home.png)
+### Authentication:
+- Click the **Login with Google** button to authenticate using Google OAuth 2.0.
+- Once authenticated, you will receive an access token in the following format:
 
 ```json
 {
-  "file_id": "1X2Y3Z4ABC",
-  "message": "File uploaded successfully"
+  "message": "User authenticated successfully!",
+  "user": {
+    "id": 1,
+    "email": "user@example.com",
+    "name": "John Doe"
+  },
+  "tokens": {
+    "refresh": "<refresh_token>",
+    "access": "<access_token>"
+  }
 }
 ```
+- Copy the `access_token` and paste it into **Postman** under **Authorization**.
+- Select **Bearer Token** and input your access token for authentication.
+![Chat Interface](Screenshots/postman.png)
 
-**Response (Error - 400 Bad Request):**
+## Chat Instructions
+- Click the **Open Chat Group 1** button.
+- Open the chat in **two or more browsers** for real-time interaction.
+- **Most impotent think don't open in two diffrent tabs of same browser You can Use Incognito of same browser**
+- When you join, set your **username**.
+- Start texting with each other in **real time**!
 
-```json
-{
-  "error": "No file provided"
-}
-```
+![Chat Interface](Screenshots/chat1.png)
+![Chat Interface](Screenshots/chat2.png)
 
----
+## API Documentation
+All API endpoints and details regarding **Google Drive integration** are available in the **Postman collection**. Refer to the Postman documentation for specific request structures and parameters.
 
-## 2. List Files in Google Drive
+## Features
+- **Google OAuth 2.0 Authentication**
+- **Google Drive File Upload & Fetching**
+- **Real-time messaging** using WebSockets
+- **Multi-tab communication support**
+- **Postman API Collection for detailed request handling**
 
-**Endpoint:**
 
-```
-GET /google-drive/files/
-```
+## Setup & Installation
+1. Clone the repository:
+   ```sh
+   git clone https://github.com/your-repo/chat-app.git
+   ```
+2. Navigate to the project directory:
+   ```sh
+   cd chat-app
+   ```
+3. Install dependencies:
+   ```sh
+   pip install -r requirements.txt  # If using Python
+   ```
+4. Start the application:
+   ```sh
+   python manage.py runserver  # Django
+   ```
 
-**Description:**
-Fetches a list of all files stored in the authenticated user's Google Drive.
+## License
+This project is licensed under the MIT License.
 
-**Headers:**
+## Contact
+For any queries, feel free to reach out.
 
-```json
-{
-  "Authorization": "Bearer <your_access_token>"
-}
-```
-
-**Response (Success - 200 OK):**
-
-```json
-{
-  "files": [
-    {
-      "id": "1X2Y3Z4ABC",
-      "name": "example.pdf"
-    },
-    {
-      "id": "4X5Y6Z7DEF",
-      "name": "photo.png"
-    }
-  ]
-}
-```
-
-**Response (Error - 400 Bad Request):**
-
-```json
-{
-  "error": "Google Drive not linked"
-}
-```
-
----
-
-## 3. Download File from Google Drive
-
-**Endpoint:**
-
-```
-GET /google-drive/download/<file_id>/
-```
-
-**Description:**
-Downloads a file from Google Drive and returns a link to access the file from local storage.
-
-**Headers:**
-
-```json
-{
-  "Authorization": "Bearer <your_access_token>"
-}
-```
-
-**Response (Success - 200 OK):**
-
-```json
-{
-  "message": "File downloaded successfully",
-  "file_url": "https://enfund-3bc4b732ed3d.herokuapp.com/media/downloads/example.pdf"
-}
-```
-
-**Response (Error - 400 Bad Request):**
-
-```json
-{
-  "error": "Google Drive not linked"
-}
-```
-
----
-
-## Error Handling
-
-| Status Code | Message                       | Description                                      |
-|------------|-------------------------------|--------------------------------------------------|
-| 400        | "No file provided"            | The request does not contain a file.            |
-| 400        | "Google Drive not linked"     | The user has not linked their Google Drive.     |
-| 500        | "Internal Server Error"       | An unexpected error occurred on the server.     |
-
----
-
-## Postman Collection
-
-To test these APIs in Postman:
-1. Open Postman and create a new request.
-2. Set the request type (POST/GET) and URL.
-3. Add the Authorization token in the headers.
-4. For upload, use form-data to attach a file.
-5. Send the request and check the response.
-
----
-
-## Notes
-- Ensure the user has authenticated and linked their Google Drive account before using these APIs.
-- The download endpoint fetches files from Google Drive and stores them in the server’s `media/downloads` directory.
-- The API uses OAuth tokens for Google Drive authentication, stored in the `GoogleDriveToken` model.
-
----
-
-This concludes the documentation for the Google Drive API endpoints. If you need further assistance, refer to the project code or contact the developer team.
+![Footer Image](#)
