@@ -1,0 +1,114 @@
+{
+	"info": {
+		"_postman_id": "d6d431eb-d174-4de6-8bf6-be8aca571e17",
+		"name": "Drive",
+		"description": "# Google Drive API Endpoints Documentation\n\nThis document provides details on the available API endpoints for integrating Google Drive with your Django application. The APIs allow users to upload files to Google Drive, list their Google Drive files, and download files from Google Drive.\n\n## Base URL\n\n```\nhttps://enfund-3bc4b732ed3d.herokuapp.com/\n\n ```\n\nReplace `enfund-3bc4b732ed3d.herokuapp.com` with your actual server URL if needed.\n\n## Authentication\n\nAll endpoints require authentication. Users must be authenticated via the Google OAuth system and have their Google Drive linked.\n\n### Obtaining Authentication Token\n\nTo authenticate, users must log in with Google and obtain a JWT token.\n\n**Endpoint:**\n\n```\nGET /auth/social/google/login\n\n ```\n\nAfter successful login, the user is redirected to the callback endpoint:\n\n```\nGET /auth/social/google/login/callback/\n\n ```\n\nThe response will contain the authentication tokens:\n\n**Response (Success - 200 OK):**\n\n``` json\n{\n  \"message\": \"User authenticated successfully!\",\n  \"user\": {\n    \"id\": 1,\n    \"email\": \"user@example.com\",\n    \"name\": \"John Doe\"\n  },\n  \"tokens\": {\n    \"refresh\": \"<refresh_token>\",\n    \"access\": \"<access_token>\"\n  }\n}\n\n ```\n\nUse the `access_token` in the `Authorization` header for all API requests.\n\n---\n\n## 1\\. Upload File to Google Drive\n\n**Endpoint:**\n\n```\nPOST /google-drive/upload/\n\n ```\n\n**Description:**  \nUploads a file to the authenticated user's Google Drive.\n\n**Headers:**\n\n``` json\n{\n  \"Authorization\": \"Bearer <your_access_token>\",\n  \"Content-Type\": \"multipart/form-data\"\n}\n\n ```\n\n**Body (Multipart Form Data):**\n\n| Key | Type | Description |\n| --- | --- | --- |\n| file | File | The file to upload |\n\n**Response (Success - 200 OK):**\n\n``` json\n{\n  \"file_id\": \"1X2Y3Z4ABC\",\n  \"message\": \"File uploaded successfully\"\n}\n\n ```\n\n**Response (Error - 400 Bad Request):**\n\n``` json\n{\n  \"error\": \"No file provided\"\n}\n\n ```\n\n---\n\n## 2\\. List Files in Google Drive\n\n**Endpoint:**\n\n```\nGET /google-drive/files/\n\n ```\n\n**Description:**  \nFetches a list of all files stored in the authenticated user's Google Drive.\n\n**Headers:**\n\n``` json\n{\n  \"Authorization\": \"Bearer <your_access_token>\"\n}\n\n ```\n\n**Response (Success - 200 OK):**\n\n``` json\n{\n  \"files\": [\n    {\n      \"id\": \"1X2Y3Z4ABC\",\n      \"name\": \"example.pdf\"\n    },\n    {\n      \"id\": \"4X5Y6Z7DEF\",\n      \"name\": \"photo.png\"\n    }\n  ]\n}\n\n ```\n\n**Response (Error - 400 Bad Request):**\n\n``` json\n{\n  \"error\": \"Google Drive not linked\"\n}\n\n ```\n\n---\n\n## 3\\. Download File from Google Drive\n\n**Endpoint:**\n\n```\nGET /google-drive/download/<file_id>/\n\n ```\n\n**Description:**  \nDownloads a file from Google Drive and returns a link to access the file from local storage.\n\n**Headers:**\n\n``` json\n{\n  \"Authorization\": \"Bearer <your_access_token>\"\n}\n\n ```\n\n**Response (Success - 200 OK):**\n\n``` json\n{\n  \"message\": \"File downloaded successfully\",\n  \"file_url\": \"https://enfund-3bc4b732ed3d.herokuapp.com/media/downloads/example.pdf\"\n}\n\n ```\n\n**Response (Error - 400 Bad Request):**\n\n``` json\n{\n  \"error\": \"Google Drive not linked\"\n}\n\n ```\n\n---\n\n## Error Handling\n\n| Status Code | Message | Description |\n| --- | --- | --- |\n| 400 | \"No file provided\" | The request does not contain a file. |\n| 400 | \"Google Drive not linked\" | The user has not linked their Google Drive. |\n| 500 | \"Internal Server Error\" | An unexpected error occurred on the server. |\n\n---\n\n## Postman Collection\n\nTo test these APIs in Postman:\n\n1. Open Postman and create a new request.\n    \n2. Set the request type (POST/GET) and URL.\n    \n3. Add the Authorization token in the headers.\n    \n4. For upload, use form-data to attach a file.\n    \n5. Send the request and check the response.\n    \n\n---\n\n## Notes\n\n- Ensure the user has authenticated and linked their Google Drive account before using these APIs.\n    \n- The download endpoint fetches files from Google Drive and stores them in the server’s `media/downloads` directory.\n    \n- The API uses OAuth tokens for Google Drive authentication, stored in the `GoogleDriveToken` model.\n    \n\n---",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "34478326"
+	},
+	"item": [
+		{
+			"name": "Upload file to drive",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/home/priyanshukumar/Downloads/a05c73624e53cf089a778d1d7d6bdce3.pdf"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{base_url}}upload/",
+					"host": [
+						"{{base_url}}upload"
+					],
+					"path": [
+						""
+					]
+				},
+				"description": "**Description:**\nUploads a file to the authenticated user's Google Drive.\n\n**Headers:**\n\n```json\n{\n  \"Authorization\": \"Bearer <your_access_token>\",\n  \"Content-Type\": \"multipart/form-data\"\n}\n```\n\n**Body (Multipart Form Data):**\n\n| Key  | Type  | Description          |\n|------|-------|----------------------|\n| file | File  | The file to upload   |\n\n**Response (Success - 200 OK):**\n\n```json\n{\n  \"file_id\": \"1X2Y3Z4ABC\",\n  \"message\": \"File uploaded successfully\"\n}\n```\n\n**Response (Error - 400 Bad Request):**\n\n```json\n{\n  \"error\": \"No file provided\"\n}\n```\n\n---"
+			},
+			"response": []
+		},
+		{
+			"name": "All Files",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}files/",
+					"host": [
+						"{{base_url}}files"
+					],
+					"path": [
+						""
+					]
+				},
+				"description": "**Description:**\nFetches a list of all files stored in the authenticated user's Google Drive.\n\n**Headers:**\n\n```json\n{\n  \"Authorization\": \"Bearer <your_access_token>\"\n}\n```\n\n**Response (Success - 200 OK):**\n\n```json\n{\n  \"files\": [\n    {\n      \"id\": \"1X2Y3Z4ABC\",\n      \"name\": \"example.pdf\"\n    },\n    {\n      \"id\": \"4X5Y6Z7DEF\",\n      \"name\": \"photo.png\"\n    }\n  ]\n}\n```\n\n**Response (Error - 400 Bad Request):**\n\n```json\n{\n  \"error\": \"Google Drive not linked\"\n}\n```"
+			},
+			"response": []
+		},
+		{
+			"name": "Download File",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}download/1At3-vFvOkCoqLaaSKsLlUOOLNA3wMwKP",
+					"host": [
+						"{{base_url}}download"
+					],
+					"path": [
+						"1At3-vFvOkCoqLaaSKsLlUOOLNA3wMwKP"
+					]
+				},
+				"description": "**Description:**  \nDownloads a file from Google Drive and returns a link to access the file from local storage.\n\n**Headers:**\n\n``` json\n{\n  \"Authorization\": \"Bearer <your_access_token>\"\n}\n\n ```\n\n**Response (Success - 200 OK):**\n\n``` json\n{\n  \"message\": \"File downloaded successfully\",\n  \"file_url\": \"https://enfund-3bc4b732ed3d.herokuapp.com/media/downloads/example.pdf\"\n}\n\n ```\n\n**Response (Error - 400 Bad Request):**\n\n``` json\n{\n  \"error\": \"Google Drive not linked\"\n}\n\n ```\n\n---"
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQwOTk0OTkwLCJpYXQiOjE3NDA5MDg1OTAsImp0aSI6IjA1MjY5MmQxOWE3NjRiMGU5NDhjNmI4OWIyMDY5ODUyIiwidXNlcl9pZCI6MX0.W1bxajs-H5CnuEAwZgL82KYRMpN3iAvCTpemFnxwPxo",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://enfund-3bc4b732ed3d.herokuapp.com/google-drive/",
+			"type": "string"
+		}
+	]
+}
