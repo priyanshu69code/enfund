@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Room</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        #chat-box {
+            width: 80%;
+            max-width: 600px;
+            margin: auto;
+            height: 400px;
+            overflow-y: scroll;
+            border: 1px solid #ccc;
+            padding: 10px;
+            background: #f9f9f9;
+        }
+        input {
+            width: 80%;
+            padding: 10px;
+        }
+        button {
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Chat Room: {{ group_name }}</h2>
+    <div id="chat-box"></div>
+
+    <input type="text" id="message-input" placeholder="Type a message...">
+    <button onclick="sendMessage()">Send</button>
+
+    <script>
+        const groupName = "{{ group_name }}";
+        const username = prompt("Enter your username:");
+        const chatSocket = new WebSocket(`ws://${window.location.host}/ws/chat/${groupName}/`);
+
+        chatSocket.onmessage = function(event) {
+            const data = JSON.parse(event.data);
+            const chatBox = document.getElementById("chat-box");
+            chatBox.innerHTML += `<p><strong>${data.username}:</strong> ${data.message}</p>`;
+            chatBox.scrollTop = chatBox.scrollHeight;
+        };
+
+        function sendMessage() {
+            const inputField = document.getElementById("message-input");
+            chatSocket.send(JSON.stringify({
+                'message': inputField.value,
+                'username': username
+            }));
+            inputField.value = "";
+        }
+    </script>
+
+</body>
+</html>

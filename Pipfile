@@ -1,0 +1,25 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+django = "*"
+djangorestframework = "*"
+markdown = "*"
+django-filter = "*"
+requests = "*"
+pyjwt = "*"
+cryptography = "*"
+djangorestframework-simplejwt = "*"
+google-auth = "*"
+google-auth-oauthlib = "*"
+google-auth-httplib2 = "*"
+google-api-python-client = "*"
+channels = {extras = ["daphne"], version = "*"}
+python-dotenv = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.13"
