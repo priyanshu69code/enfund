@@ -1,31 +1,3 @@
-# Real-Time Chat Application
-
-![Project Banner](#)
-
-## Overview
-We are looking for a talented Backend Developer to join our dynamic team. As part of the application process, candidates will be required to complete a small assignment that involves integrating several technologies using Django as the backend framework. This assignment will help us assess your skills and fit for our team.
-
-## Assignment Overview
-The assignment involves creating a comprehensive template for integrating the following technologies:
-- **Google OAuth 2.0 API** for user authentication.
-- **Google Picker API** for file uploads and reading data in JSON format.
-- **A WebSocket** for real-time communication between users.
-
-## Detailed Requirements
-### 1. Google Authentication Flow
-- Create an endpoint that initiates the **Google Auth** flow.
-- Implement a **callback URL** where Google sends the authentication data.
-- Return the authentication data received from Google.
-
-### 2. Google Drive Integration
-- Develop an endpoint that allows users to connect their **Google Drive**.
-- Implement functionality for users to **upload files** to their Google Drive.
-- Provide an option to **fetch and download files** locally from Google Drive.
-
-### 3. WebSocket for User Chat
-- Implement a **WebSocket** that enables real-time chat between two pre-configured users.
-- Ensure that messages are **sent and received in real-time**.
-
 ## Home Page Instructions
 ![Chat Interface](Screenshots/home.png)
 ### Authentication:
